@@ -1,0 +1,23 @@
+{
+    "version": "1.0",
+    "session": {
+      "new": true,
+      "sessionId": "session0001",
+      "application": {
+        "applicationId": "amzn1.echo-sdk-ams.app.0001"
+      },
+      "attributes": {},
+      "user": {
+        "userId": null
+      }
+    },
+    "request": {
+      "type": "IntentRequest",
+      "requestId": "request0001",
+      "timestamp": "2018-08-11T13:04:56+0900",
+      "intent": {
+        "name": "GreetingIntent"
+      },
+      "locale": "ja-JP"
+    }
+  }
