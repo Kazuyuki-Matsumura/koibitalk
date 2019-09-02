@@ -20,11 +20,26 @@ const TopicIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'TopicIntent';
   },
   handle(handlerInput) {
-    const speechText = '私の好きな食べ物は鯖ですが，お二人の好きな食べ物はなんですか？';
+    // const speechText = '私の好きな食べ物は鯖ですが，お二人の好きな食べ物はなんですか？';
+
+    let x = 1;
+    let size;
+
+    const speechText = [
+        'お二人で旅行に行くならどこに行きたいですか？',
+        'お二人で住むならどこに住みたいですか？',
+        'お二人でスポーツするなら何がしたいですか？',
+        'お二人で料理するなら何を作りますか？',
+        'お二人で映画を観るなら何をみますか？',
+        'お二人で遊びに行くならどこに行きたいですか？'
+    ];
+
+    size = speechText.length - 1;
+    x = Math.floor(Math.random() * size);
 
     return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard('コイビトーク', speechText)
+      .speak(speechText[x])
+      .withSimpleCard('コイビトーク', speechText[x])
       .getResponse();
   },
 };
