@@ -1,15 +1,17 @@
-// （1）Alexa Skills Kit SDK を読み込む
 const Alexa = require('ask-sdk-core');
 
-// （2）リクエストハンドラーを定義する
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
+
+    const speechText = 'コイビトークへようこそ，お二人の名前を教えてください．まず，一人目の方の名前を教えてください';
+    const repromptText = '一人目の方の名前を教えてください';
+
     return handlerInput.responseBuilder
-      .speak('こんにちは，話題を提供してと言ってみてください')
-      .reprompt('こんにちは，話題を提供してと言ってみてください')
+      .speak(speechText)
+      .reprompt(repromptText)
       .getResponse();
   },
 };
@@ -20,7 +22,9 @@ const TopicIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'TopicIntent';
   },
   handle(handlerInput) {
-    // const speechText = '私の好きな食べ物は鯖ですが，お二人の好きな食べ物はなんですか？';
+
+    // let wadai = handlerInput.requestEnvelope.request.intent.slots.thema.name;
+    // console.log('%s', wadai);
 
     let x = 1;
     let size;
@@ -31,7 +35,9 @@ const TopicIntentHandler = {
         'お二人でスポーツするなら何がしたいですか？',
         'お二人で料理するなら何を作りますか？',
         'お二人で映画を観るなら何をみますか？',
-        'お二人で遊びに行くならどこに行きたいですか？'
+        'お二人で遊びに行くならどこに行きたいですか？',
+        'お二人でカラオケに行ったら何を歌いますか？',
+        'お二人で新しい趣味を始めるなら何を始めますか？'
     ];
 
     size = speechText.length - 1;
@@ -44,20 +50,42 @@ const TopicIntentHandler = {
   },
 };
 
-// const GreetingIntentHandler = {
-//   canHandle(handlerInput) {
-//     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-//       && handlerInput.requestEnvelope.request.intent.name === 'GreetingIntent';
-//   },
-//   handle(handlerInput) {
-//     const speechText = 'こんにちは';
+const RegisterIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'RegisterIntent';
+  },
+  handle(handlerInput) {
 
-//     return handlerInput.responseBuilder
-//       .speak(speechText)
-//       .withSimpleCard('あいさつスキル', speechText)
-//       .getResponse();
-//   },
-// };
+    const slots = handlerInput.requestEnvelope.request.intent.slots;
+    let username = slots.name.value;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    
+    if(attributes.username1===undefined){
+      attributes.username1 = username;
+      handlerInput.attributesManager.setSessionAttributes(attributes)
+      const speechText = `${attributes.username1}さんですね．もう一人の方の名前を教えてください`;
+      const repromptText = 'もう一人の方の名前を教えてください';
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(repromptText)
+        .getResponse();
+    }
+
+    if(attributes.username2===undefined){
+      attributes.username2 = username;
+      handlerInput.attributesManager.setSessionAttributes(attributes)
+      const speechText = `${attributes.username1}さんと${attributes.username2}さんですね．話題を提供してと言ってみてください`;
+      const repromptText = '話題を提供してと言ってみてください';
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(repromptText)
+        .getResponse();
+    }
+  },
+};
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
@@ -123,6 +151,7 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
+    RegisterIntentHandler,
     TopicIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
