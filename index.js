@@ -1,4 +1,8 @@
+//mport * as Adapter from 'ask-sdk-s3-persistence-adapter';
+
 const Alexa = require('ask-sdk-core');
+const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
+
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -16,40 +20,6 @@ const LaunchRequestHandler = {
   },
 };
 
-const TopicIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'TopicIntent';
-  },
-  handle(handlerInput) {
-
-    // let wadai = handlerInput.requestEnvelope.request.intent.slots.thema.name;
-    // console.log('%s', wadai);
-
-    let x = 1;
-    let size;
-
-    const speechText = [
-        'お二人で旅行に行くならどこに行きたいですか？',
-        'お二人で住むならどこに住みたいですか？',
-        'お二人でスポーツするなら何がしたいですか？',
-        'お二人で料理するなら何を作りますか？',
-        'お二人で映画を観るなら何をみますか？',
-        'お二人で遊びに行くならどこに行きたいですか？',
-        'お二人でカラオケに行ったら何を歌いますか？',
-        'お二人で新しい趣味を始めるなら何を始めますか？'
-    ];
-
-    size = speechText.length - 1;
-    x = Math.floor(Math.random() * size);
-
-    return handlerInput.responseBuilder
-      .speak(speechText[x])
-      .withSimpleCard('コイビトーク', speechText[x])
-      .getResponse();
-  },
-};
-
 const RegisterIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -59,6 +29,7 @@ const RegisterIntentHandler = {
 
     const slots = handlerInput.requestEnvelope.request.intent.slots;
     let username = slots.name.value;
+    //二人の名前を登録するためにセッションアトリビュートの使用．
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     
     if(attributes.username1===undefined){
@@ -87,6 +58,46 @@ const RegisterIntentHandler = {
   },
 };
 
+const TopicIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'TopicIntent';
+  },
+  async handle(handlerInput) {
+
+    // let wadai = handlerInput.requestEnvelope.request.intent.slots.thema.name;
+    // console.log('%s', wadai);
+
+    let x = 1;
+    let size;
+
+    const speechText = [
+        // 未来の話題
+        'お二人で旅行に行くならどの都道府県に行きたいですか？',
+        'お二人で旅行に行くならどの国に行きたいですか？',
+        'お二人で住むならどの国に住みたいですか？',
+        'お二人でスポーツするなら何がしたいですか？',
+        'お二人で料理するなら何を作りますか？',
+        'お二人で映画を観るなら何をみますか？',
+        'お二人で遊びに行くならどこに行きたいですか？',
+        'お二人でカラオケに行ったら何を歌いますか？',
+        'お二人で新しい趣味を始めるなら何を始めますか？',
+        'お二人で新しいことを始めるなら何を始めますか？',
+        //過去の話題
+        'お二人が初めて会った場所を教えてください',
+        'お二人の初デートのことを教えてください'
+    ];    
+
+    size = speechText.length - 1;
+    x = Math.floor(Math.random() * size);
+
+    return handlerInput.responseBuilder
+      .speak(speechText[x])
+      .withSimpleCard('コイビトーク', speechText[x])
+      .getResponse();
+  },
+};
+
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -110,7 +121,7 @@ const CancelAndStopIntentHandler = {
         || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
   },
   handle(handlerInput) {
-    const speechText = 'Goodbye!';
+    const speechText = 'バイバイ';
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -158,4 +169,7 @@ exports.handler = skillBuilder
     SessionEndedRequestHandler
   )
   .addErrorHandlers(ErrorHandler)
+  .withPersistenceAdapter(
+    new persistenceAdapter.S3PersistenceAdapter(
+        {bucketName:process.env.S3_PERSISTENCE_BUCKET}))
   .lambda();
