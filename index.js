@@ -1,5 +1,3 @@
-//mport * as Adapter from 'ask-sdk-s3-persistence-adapter';
-
 const Alexa = require('ask-sdk-core');
 const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 
@@ -65,9 +63,6 @@ const TopicIntentHandler = {
   },
   async handle(handlerInput) {
 
-    // let wadai = handlerInput.requestEnvelope.request.intent.slots.thema.name;
-    // console.log('%s', wadai);
-
     let x = 1;
     let size;
 
@@ -88,11 +83,47 @@ const TopicIntentHandler = {
         'お二人の初デートのことを教えてください'
     ];    
 
+    //質問をランダムで提示する
     size = speechText.length - 1;
     x = Math.floor(Math.random() * size);
 
+    //以前に行った質問を記録する
+    // const attr = await handlerInput.attributesManager.getPersistentAttributes();
+    // attr.preQuestion = 'お二人で旅行に行くならどの都道府県に行きたいですか？';
+    // handlerInput.attributesManager.setPersistentAttributes(attr);
+    // await handlerInput.attributesManager.savePersistentAttributes();
+    // console.log(attr.prequestion);
+
     return handlerInput.responseBuilder
       .speak(speechText[x])
+      .withSimpleCard('コイビトーク', speechText[x])
+      .getResponse();
+  },
+};
+
+const FacilitateIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'FacilitateIntent';
+  },
+  handle(handlerInput) {
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard('コイビトーク', speechText[x])
+      .getResponse();
+  },
+};
+
+const ContinueIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'ContinueIntent';
+  },
+  handle(handlerInput) {
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
       .withSimpleCard('コイビトーク', speechText[x])
       .getResponse();
   },
@@ -164,6 +195,8 @@ exports.handler = skillBuilder
     LaunchRequestHandler,
     RegisterIntentHandler,
     TopicIntentHandler,
+    FacilitateIntentHandler,
+    ContinueIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
