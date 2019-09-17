@@ -1,7 +1,6 @@
 const Alexa = require('ask-sdk-core');
 const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 
-
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
@@ -66,26 +65,43 @@ const TopicIntentHandler = {
     let x = 1;
     let size;
 
-    const speechText = [
-        // 未来の話題
-        'お二人で旅行に行くならどの都道府県に行きたいですか？',
-        'お二人で旅行に行くならどの国に行きたいですか？',
-        'お二人で住むならどの国に住みたいですか？',
-        'お二人でスポーツするなら何がしたいですか？',
-        'お二人で料理するなら何を作りますか？',
-        'お二人で映画を観るなら何をみますか？',
-        'お二人で遊びに行くならどこに行きたいですか？',
-        'お二人でカラオケに行ったら何を歌いますか？',
-        'お二人で新しい趣味を始めるなら何を始めますか？',
-        'お二人で新しいことを始めるなら何を始めますか？',
-        //過去の話題
-        'お二人が初めて会った場所を教えてください',
-        'お二人の初デートのことを教えてください'
-    ];    
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    // attributes.username1 = '松村';
+    // attributes.username2 = '佐藤';
+    // handlerInput.attributesManager.setSessionAttributes(attributes)
+
+    if(attributes.username1 === undefined || attributes.username2 === undefined){
+      speechText = [
+          // 未来の話題
+          'お二人で旅行に行くならどの都道府県に行きたいですか？',
+          'お二人で旅行に行くならどの国に行きたいですか？',
+          'お二人で住むならどの国に住みたいですか？',
+          'お二人でスポーツするなら何がしたいですか？',
+          'お二人で料理するなら何を作りますか？',
+          'お二人で映画を観るなら何をみますか？',
+          'お二人で遊びに行くならどこに行きたいですか？',
+          'お二人でカラオケに行ったら何を歌いますか？',
+          'お二人で新しい趣味を始めるなら何を始めますか？',
+          'お二人で新しいことを始めるなら何を始めますか？',
+          //過去の話題
+          'お二人が初めて会った場所を教えてください',
+          'お二人の初デートのことを教えてください'
+      ];
+    }else{
+      speechText = [
+        `${attributes.username1}さんに質問です.お二人で旅行に行くならどの都道府県に行きたいですか？`,
+        `${attributes.username2}さんに質問です.お二人で旅行に行くならどの都道府県に行きたいですか？`,
+        `${attributes.username1}さんに質問です.お二人で旅行に行くならどの国に行きたいですか？`,
+        `${attributes.username2}さんに質問です.お二人で旅行に行くならどの国に行きたいですか？`
+      ];
+    };
 
     //質問をランダムで提示する
-    size = speechText.length - 1;
+    size = speechText.length ;
     x = Math.floor(Math.random() * size);
+
+    attributes.number = x;
+    handlerInput.attributesManager.setSessionAttributes(attributes)
 
     //以前に行った質問を記録する
     // const attr = await handlerInput.attributesManager.getPersistentAttributes();
@@ -108,9 +124,42 @@ const FacilitateIntentHandler = {
   },
   handle(handlerInput) {
 
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    // attributes.username1 = '松村';
+    // attributes.username2 = '佐藤';
+    // attributes.number = 0;
+    // handlerInput.attributesManager.setSessionAttributes(attributes)
+
+    if(attributes.username1 === undefined || attributes.username2 === undefined){
+      speechText = [
+          // 未来の話題
+          'とてもいいですね，そこで何をしたいですか？',
+          'お二人で旅行に行くならどの国に行きたいですか？',
+          'お二人で住むならどの国に住みたいですか？',
+          'お二人でスポーツするなら何がしたいですか？',
+          'お二人で料理するなら何を作りますか？',
+          'お二人で映画を観るなら何をみますか？',
+          'お二人で遊びに行くならどこに行きたいですか？',
+          'お二人でカラオケに行ったら何を歌いますか？',
+          'お二人で新しい趣味を始めるなら何を始めますか？',
+          'お二人で新しいことを始めるなら何を始めますか？',
+          //過去の話題
+          'お二人が初めて会った場所を教えてください',
+          'お二人の初デートのことを教えてください'
+      ];
+    }else{
+      speechText = [
+        `${attributes.username2}さん，そのことについてどう思いますか？`,
+        `${attributes.username1}さん，そのことについてどう思いますか？`,
+        `${attributes.username2}さん，そのことについてどう思いますか？`,
+        `${attributes.username1}さん，そのことについてどう思いますか？`
+      ]
+    };
+
     return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard('コイビトーク', speechText[x])
+      .speak(speechText[attributes.number])
+      .withSimpleCard('コイビトーク', speechText[attributes.number])
+      .reprompt(speechText[attributes.number])
       .getResponse();
   },
 };
@@ -187,6 +236,13 @@ const ErrorHandler = {
   },
 };
 
+//インターセプターの処理
+// const responseIntercepter = {
+//   process(handlerInput) {
+//     console.log("インターセプターの処理はここ");
+//   }
+// }
+
 // （4）Lambda 関数ハンドラーを定義する
 const skillBuilder = Alexa.SkillBuilders.custom();
 
@@ -201,6 +257,8 @@ exports.handler = skillBuilder
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
   )
+  //インターセプターの処理
+  // .addResponseInterceptors(responseIntercepter)
   .addErrorHandlers(ErrorHandler)
   .withPersistenceAdapter(
     new persistenceAdapter.S3PersistenceAdapter(
