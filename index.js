@@ -1,5 +1,6 @@
 const Alexa = require('ask-sdk-core');
 const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
+const Adapter = require('ask-sdk-dynamodb-persistence-adapter');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -7,8 +8,8 @@ const LaunchRequestHandler = {
   },
   handle(handlerInput) {
 
-    const speechText = 'コイビトークへようこそ，お二人の名前を教えてください．まず，一人目の方の名前を教えてください';
-    const repromptText = '一人目の方の名前を教えてください';
+    const speechText = '<prosody pitch="x-low">コイビトークへようこそ．<break time="1s"/>あなたたちの名前を聞かせてもらうわ．<break time="1s"/>ひとりめの名前を教えてちょうだい．</prosody>';
+    const repromptText = '<prosody pitch="x-low">ひとりめの名前を教えてちょうだい</prosody>';
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -32,8 +33,8 @@ const RegisterIntentHandler = {
     if(attributes.username1===undefined){
       attributes.username1 = username;
       handlerInput.attributesManager.setSessionAttributes(attributes)
-      const speechText = `${attributes.username1}さんですね．もう一人の方の名前を教えてください`;
-      const repromptText = 'もう一人の方の名前を教えてください';
+      const speechText = `<prosody pitch="x-low">${attributes.username1}さんね．もう一人の方の名前を教えてちょうだい</prosody>`;
+      const repromptText = '<prosody pitch="x-low">もう一人の方の名前を教えてちょうだい</prosody>';
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -44,8 +45,8 @@ const RegisterIntentHandler = {
     if(attributes.username2===undefined){
       attributes.username2 = username;
       handlerInput.attributesManager.setSessionAttributes(attributes)
-      const speechText = `${attributes.username1}さんと${attributes.username2}さんですね．話題を提供してと言ってみてください`;
-      const repromptText = '話題を提供してと言ってみてください';
+      const speechText = `<prosody pitch="x-low">${attributes.username1}さんと${attributes.username2}さんね．話題を提供してと言ってみてちょうだい</prosody>`;
+      const repromptText = '<prosody pitch="x-low">話題を提供してと言ってみてちょうだい</prosody>';
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -89,12 +90,12 @@ const TopicIntentHandler = {
       ];
     }else{
       speechText = [
-        `${attributes.username1}さんに質問です.お二人で旅行に行くならどの都道府県に行きたいですか？`,
-        `${attributes.username2}さんに質問です.お二人で旅行に行くならどの都道府県に行きたいですか？`,
-        `${attributes.username1}さんに質問です.お二人で旅行に行くならどの国に行きたいですか？`,
-        `${attributes.username2}さんに質問です.お二人で旅行に行くならどの国に行きたいですか？`,
-        `${attributes.username1}さんに質問です.お二人でスポーツするなら何がしたいですか？`,
-        `${attributes.username2}さんに質問です.お二人でスポーツするなら何がしたいですか？`
+        `<prosody pitch="x-low">${attributes.username1}さん，答えてちょうだい.二人で旅行に行くならどの都道府県に行きたいの？</prosody>`,
+        `<prosody pitch="x-low">${attributes.username2}さん，答えてちょうだい.二人で旅行に行くならどの都道府県に行きたいの？</prosody>`,
+        `<prosody pitch="x-low">${attributes.username1}さん，答えてちょうだい.二人で旅行に行くならどの国に行きたいの？</prosody>`,
+        `<prosody pitch="x-low">${attributes.username2}さん，答えてちょうだい.二人で旅行に行くならどの国に行きたいの？</prosody>`,
+        `<prosody pitch="x-low">${attributes.username1}さん，答えてちょうだい.二人でスポーツするなら何がしたいの？</prosody>`,
+        `<prosody pitch="x-low">${attributes.username2}さん，答えてちょうだい.二人でスポーツするなら何がしたいの？</prosody>`
       ];
     };
 
@@ -114,6 +115,7 @@ const TopicIntentHandler = {
 
     return handlerInput.responseBuilder
       .speak(speechText[x])
+      .reprompt(speechText[attributes.number])
       .withSimpleCard('コイビトーク', speechText[x])
       .getResponse();
   },
@@ -151,19 +153,19 @@ const FacilitateIntentHandler = {
       ];
     }else{
       speechText = [
-        `${attributes.username2}さん，そのことについてどう思いますか？`,
-        `${attributes.username1}さん，そのことについてどう思いますか？`,
-        `${attributes.username2}さん，そのことについてどう思いますか？`,
-        `${attributes.username1}さん，そのことについてどう思いますか？`,
-        `${attributes.username2}さん，そのことについてどう思いますか？`,
-        `${attributes.username1}さん，そのことについてどう思いますか？`
+        `え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？`,
+        `え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？`,
+        `え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？`,
+        `え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？`,
+        `え〜，本当にそれでいいの？${attributes.username2}さんはしたい？`,
+        `え〜，本当にそれでいいの？${attributes.username1}さんはしたい？`
       ]
     };
 
     return handlerInput.responseBuilder
       .speak(speechText[attributes.number])
-      .withSimpleCard('コイビトーク', speechText[attributes.number])
       .reprompt(speechText[attributes.number])
+      .withSimpleCard('コイビトーク', speechText[attributes.number])
       .getResponse();
   },
 };
@@ -177,6 +179,7 @@ const ContinueIntentHandler = {
 
     return handlerInput.responseBuilder
       .speak(speechText)
+      .reprompt(speechText)
       .withSimpleCard('コイビトーク', speechText[x])
       .getResponse();
   },

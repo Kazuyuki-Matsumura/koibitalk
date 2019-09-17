@@ -1,0 +1,815 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "コイビトーク",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "TopicIntent",
+                    "slots": [
+                        {
+                            "name": "thema",
+                            "type": "thema"
+                        }
+                    ],
+                    "samples": [
+                        "{thema} がない",
+                        "{thema} を教えて",
+                        "{thema}",
+                        "{thema} を提供して"
+                    ]
+                },
+                {
+                    "name": "RegisterIntent",
+                    "slots": [
+                        {
+                            "name": "name",
+                            "type": "name"
+                        }
+                    ],
+                    "samples": [
+                        "{name} です",
+                        "{name} "
+                    ]
+                },
+                {
+                    "name": "FacilitateIntent",
+                    "slots": [
+                        {
+                            "name": "prefecture",
+                            "type": "prefecture"
+                        },
+                        {
+                            "name": "country",
+                            "type": "country"
+                        },
+                        {
+                            "name": "sport",
+                            "type": "sport"
+                        }
+                    ],
+                    "samples": [
+                        "{sport} です",
+                        "{sport}",
+                        "{sport} がしたい",
+                        "{country} に行きたい",
+                        "{country} です",
+                        "{country}",
+                        "{prefecture}",
+                        "{prefecture} に行きたい",
+                        "{prefecture} です"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "thema",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "話題",
+                                "synonyms": [
+                                    "会話",
+                                    "話"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "name",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "カメダ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "トミヤマ"
+                            }
+                        }, 
+                        {
+                            "name": {
+                                "value": "イツハ"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "prefecture",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "北海道"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "青森県",
+                                "synonyms": [
+                                    "青森"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "岩手県",
+                                "synonyms": [
+                                    "岩手"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "宮城県",
+                                "synonyms": [
+                                    "宮城"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "秋田県",
+                                "synonyms": [
+                                    "秋田"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "山形県",
+                                "synonyms": [
+                                    "山形"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "福島県",
+                                "synonyms": [
+                                    "福島"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "茨城県",
+                                "synonyms": [
+                                    "茨城"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "栃木県",
+                                "synonyms": [
+                                    "栃木"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "群馬県",
+                                "synonyms": [
+                                    "群馬"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "埼玉県",
+                                "synonyms": [
+                                    "埼玉"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "千葉県",
+                                "synonyms": [
+                                    "千葉"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "東京都",
+                                "synonyms": [
+                                    "東京"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "神奈川県",
+                                "synonyms": [
+                                    "神奈川"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "新潟県",
+                                "synonyms": [
+                                    "新潟"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "富山県",
+                                "synonyms": [
+                                    "富山"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "石川県",
+                                "synonyms": [
+                                    "石川"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "福井県",
+                                "synonyms": [
+                                    "福井"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "山梨県",
+                                "synonyms": [
+                                    "山梨"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "長野県",
+                                "synonyms": [
+                                    "長野"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "岐阜県",
+                                "synonyms": [
+                                    "岐阜"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "静岡県",
+                                "synonyms": [
+                                    "静岡"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "愛知県",
+                                "synonyms": [
+                                    "愛知"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "三重県",
+                                "synonyms": [
+                                    "三重"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "滋賀県",
+                                "synonyms": [
+                                    "滋賀"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "京都府",
+                                "synonyms": [
+                                    "京都"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "大阪府",
+                                "synonyms": [
+                                    "大阪"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "兵庫県",
+                                "synonyms": [
+                                    "兵庫"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "奈良県",
+                                "synonyms": [
+                                    "奈良"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "和歌山県",
+                                "synonyms": [
+                                    "和歌山"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "鳥取県",
+                                "synonyms": [
+                                    "鳥取"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "島根県",
+                                "synonyms": [
+                                    "島根"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "岡山県",
+                                "synonyms": [
+                                    "岡山"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "広島県",
+                                "synonyms": [
+                                    "広島"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "山口県",
+                                "synonyms": [
+                                    "山口"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "徳島県",
+                                "synonyms": [
+                                    "徳島"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "香川県",
+                                "synonyms": [
+                                    "香川"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "愛媛県",
+                                "synonyms": [
+                                    "愛媛"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "高知県",
+                                "synonyms": [
+                                    "高知"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "福岡県",
+                                "synonyms": [
+                                    "福岡"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "佐賀県",
+                                "synonyms": [
+                                    "佐賀"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "長崎県",
+                                "synonyms": [
+                                    "長崎"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "熊本県",
+                                "synonyms": [
+                                    "熊本"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "大分県",
+                                "synonyms": [
+                                    "大分"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "宮崎県",
+                                "synonyms": [
+                                    "宮崎"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "鹿児島県",
+                                "synonyms": [
+                                    "鹿児島"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "沖縄県",
+                                "synonyms": [
+                                    "沖縄"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "country",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "アイスランド"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ブルネイ|ブルネイ・ダルサラーム"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ブルンジ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ベトナム"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ベナン"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ベネズエラ|ベネズエラ・ボリバル共和国"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ベラルーシ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ベリーズ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ペルー"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ベルギー"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ポーランド"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ボスニア・ヘルツェゴビナ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ボツワナ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BES諸島|ボネール、シント・ユースタティウスおよびサバ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ボリビア|ボリビア多民族国"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ポルトガル"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "香港"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ホンジュラス"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マーシャル諸島"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マカオ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マケドニア共和国|マケドニア旧ユーゴスラビア共和国"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マダガスカル"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マヨット"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マラウイ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マリ共和国|マリ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マルタ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マルティニーク"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マレーシア"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "マン島"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ミクロネシア連邦"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "南アフリカ共和国|南アフリカ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "南スーダン"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ミャンマー"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "メキシコ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モーリシャス"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モーリタニア"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モザンビーク"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モナコ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モルディブ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モルドバ|モルドバ共和国"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モロッコ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モンゴル国|モンゴル"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モンテネグロ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "モントセラト"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ヨルダン"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ラオス|ラオス人民民主共和国"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ラトビア"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "リトアニア"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "リビア"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "リヒテンシュタイン"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "リベリア"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ルーマニア"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ルクセンブルク"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ルワンダ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "レソト"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "レバノン"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "レユニオン"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ロシア|ロシア連邦"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "sport",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "卓球"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "テニス"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "野球"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "サッカー"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
