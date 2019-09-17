@@ -1,4 +1,5 @@
 const Alexa = require('ask-sdk-core');
+const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -16,40 +17,6 @@ const LaunchRequestHandler = {
   },
 };
 
-const TopicIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'TopicIntent';
-  },
-  handle(handlerInput) {
-
-    // let wadai = handlerInput.requestEnvelope.request.intent.slots.thema.name;
-    // console.log('%s', wadai);
-
-    let x = 1;
-    let size;
-
-    const speechText = [
-        'お二人で旅行に行くならどこに行きたいですか？',
-        'お二人で住むならどこに住みたいですか？',
-        'お二人でスポーツするなら何がしたいですか？',
-        'お二人で料理するなら何を作りますか？',
-        'お二人で映画を観るなら何をみますか？',
-        'お二人で遊びに行くならどこに行きたいですか？',
-        'お二人でカラオケに行ったら何を歌いますか？',
-        'お二人で新しい趣味を始めるなら何を始めますか？'
-    ];
-
-    size = speechText.length - 1;
-    x = Math.floor(Math.random() * size);
-
-    return handlerInput.responseBuilder
-      .speak(speechText[x])
-      .withSimpleCard('コイビトーク', speechText[x])
-      .getResponse();
-  },
-};
-
 const RegisterIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -59,6 +26,7 @@ const RegisterIntentHandler = {
 
     const slots = handlerInput.requestEnvelope.request.intent.slots;
     let username = slots.name.value;
+    //二人の名前を登録するためにセッションアトリビュートの使用．
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     
     if(attributes.username1===undefined){
@@ -87,6 +55,133 @@ const RegisterIntentHandler = {
   },
 };
 
+const TopicIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'TopicIntent';
+  },
+  async handle(handlerInput) {
+
+    let x = 1;
+    let size;
+
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    // attributes.username1 = '松村';
+    // attributes.username2 = '佐藤';
+    // handlerInput.attributesManager.setSessionAttributes(attributes)
+
+    if(attributes.username1 === undefined || attributes.username2 === undefined){
+      speechText = [
+          // 未来の話題
+          'お二人で旅行に行くならどの都道府県に行きたいですか？',
+          'お二人で旅行に行くならどの国に行きたいですか？',
+          'お二人で住むならどの国に住みたいですか？',
+          'お二人でスポーツするなら何がしたいですか？',
+          'お二人で料理するなら何を作りますか？',
+          'お二人で映画を観るなら何をみますか？',
+          'お二人で遊びに行くならどこに行きたいですか？',
+          'お二人でカラオケに行ったら何を歌いますか？',
+          'お二人で新しい趣味を始めるなら何を始めますか？',
+          'お二人で新しいことを始めるなら何を始めますか？',
+          //過去の話題
+          'お二人が初めて会った場所を教えてください',
+          'お二人の初デートのことを教えてください'
+      ];
+    }else{
+      speechText = [
+        `${attributes.username1}さんに質問です.お二人で旅行に行くならどの都道府県に行きたいですか？`,
+        `${attributes.username2}さんに質問です.お二人で旅行に行くならどの都道府県に行きたいですか？`,
+        `${attributes.username1}さんに質問です.お二人で旅行に行くならどの国に行きたいですか？`,
+        `${attributes.username2}さんに質問です.お二人で旅行に行くならどの国に行きたいですか？`,
+        `${attributes.username1}さんに質問です.お二人でスポーツするなら何がしたいですか？`,
+        `${attributes.username2}さんに質問です.お二人でスポーツするなら何がしたいですか？`
+      ];
+    };
+
+    //質問をランダムで提示する
+    size = speechText.length ;
+    x = Math.floor(Math.random() * size);
+
+    attributes.number = x;
+    handlerInput.attributesManager.setSessionAttributes(attributes)
+
+    //以前に行った質問を記録する
+    // const attr = await handlerInput.attributesManager.getPersistentAttributes();
+    // attr.preQuestion = 'お二人で旅行に行くならどの都道府県に行きたいですか？';
+    // handlerInput.attributesManager.setPersistentAttributes(attr);
+    // await handlerInput.attributesManager.savePersistentAttributes();
+    // console.log(attr.prequestion);
+
+    return handlerInput.responseBuilder
+      .speak(speechText[x])
+      .withSimpleCard('コイビトーク', speechText[x])
+      .getResponse();
+  },
+};
+
+const FacilitateIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'FacilitateIntent';
+  },
+  handle(handlerInput) {
+
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    // attributes.username1 = '松村';
+    // attributes.username2 = '佐藤';
+    // attributes.number = 0;
+    // handlerInput.attributesManager.setSessionAttributes(attributes)
+
+    if(attributes.username1 === undefined || attributes.username2 === undefined){
+      speechText = [
+          // 未来の話題
+          'とてもいいですね，そこで何をしたいですか？',
+          'お二人で旅行に行くならどの国に行きたいですか？',
+          'お二人で住むならどの国に住みたいですか？',
+          'お二人でスポーツするなら何がしたいですか？',
+          'お二人で料理するなら何を作りますか？',
+          'お二人で映画を観るなら何をみますか？',
+          'お二人で遊びに行くならどこに行きたいですか？',
+          'お二人でカラオケに行ったら何を歌いますか？',
+          'お二人で新しい趣味を始めるなら何を始めますか？',
+          'お二人で新しいことを始めるなら何を始めますか？',
+          //過去の話題
+          'お二人が初めて会った場所を教えてください',
+          'お二人の初デートのことを教えてください'
+      ];
+    }else{
+      speechText = [
+        `${attributes.username2}さん，そのことについてどう思いますか？`,
+        `${attributes.username1}さん，そのことについてどう思いますか？`,
+        `${attributes.username2}さん，そのことについてどう思いますか？`,
+        `${attributes.username1}さん，そのことについてどう思いますか？`,
+        `${attributes.username2}さん，そのことについてどう思いますか？`,
+        `${attributes.username1}さん，そのことについてどう思いますか？`
+      ]
+    };
+
+    return handlerInput.responseBuilder
+      .speak(speechText[attributes.number])
+      .withSimpleCard('コイビトーク', speechText[attributes.number])
+      .reprompt(speechText[attributes.number])
+      .getResponse();
+  },
+};
+
+const ContinueIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'ContinueIntent';
+  },
+  handle(handlerInput) {
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard('コイビトーク', speechText[x])
+      .getResponse();
+  },
+};
+
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -110,7 +205,7 @@ const CancelAndStopIntentHandler = {
         || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
   },
   handle(handlerInput) {
-    const speechText = 'Goodbye!';
+    const speechText = 'バイバイ';
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -145,6 +240,13 @@ const ErrorHandler = {
   },
 };
 
+//インターセプターの処理
+// const responseIntercepter = {
+//   process(handlerInput) {
+//     console.log("インターセプターの処理はここ");
+//   }
+// }
+
 // （4）Lambda 関数ハンドラーを定義する
 const skillBuilder = Alexa.SkillBuilders.custom();
 
@@ -153,9 +255,16 @@ exports.handler = skillBuilder
     LaunchRequestHandler,
     RegisterIntentHandler,
     TopicIntentHandler,
+    FacilitateIntentHandler,
+    ContinueIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
   )
+  //インターセプターの処理
+  // .addResponseInterceptors(responseIntercepter)
   .addErrorHandlers(ErrorHandler)
+  .withPersistenceAdapter(
+    new persistenceAdapter.S3PersistenceAdapter(
+        {bucketName:process.env.S3_PERSISTENCE_BUCKET}))
   .lambda();
