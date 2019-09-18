@@ -1,0 +1,90 @@
+{
+	"version": "1.0",
+	"session": {
+		"new": false,
+		"sessionId": "amzn1.echo-api.session.c436fb6f-4821-44b1-9957-f546903f3165",
+		"application": {
+			"applicationId": "amzn1.ask.skill.6b8c4ee1-b26e-434b-b936-e4a0edaa8422"
+		},
+		"user": {
+			"userId": "amzn1.ask.account.AE4A2LHICMTH4DVL5FZIQS4FGFDC3BBH5S5NFXURUFIGVX7YCSEZBYBXKHLME37DSPI2PLCNCLJR4FKVNWHMX3EM6JRUUB62A64HNN5XDAHYSAJDUZ7XITXUDQDT4NKGZ7XJE53XY7JKASIFS3GNCXPKG7XVBLMKSV3PTCP6CCF67G72KEMSGMXUTN3VE4QGY6OTI6HQYQZCNCQ"
+		}
+	},
+	"context": {
+		"System": {
+			"application": {
+				"applicationId": "amzn1.ask.skill.6b8c4ee1-b26e-434b-b936-e4a0edaa8422"
+			},
+			"user": {
+				"userId": "amzn1.ask.account.AE4A2LHICMTH4DVL5FZIQS4FGFDC3BBH5S5NFXURUFIGVX7YCSEZBYBXKHLME37DSPI2PLCNCLJR4FKVNWHMX3EM6JRUUB62A64HNN5XDAHYSAJDUZ7XITXUDQDT4NKGZ7XJE53XY7JKASIFS3GNCXPKG7XVBLMKSV3PTCP6CCF67G72KEMSGMXUTN3VE4QGY6OTI6HQYQZCNCQ"
+			},
+			"device": {
+				"deviceId": "amzn1.ask.device.AGAVMDCHGUDPHGSUL5KGH6F5Q64MXRAI6V7NCACLVLZNDLG3YDNBTGYVIVFB3VNYJTBOLVKBSXRDY5EFW76IK2KI6UAHHVOEZJUZSBGDEGCW3TRRGO4OYUCIQSUWLDKXWSC7Z7QIKOPGMZZILCQQR5SJHGRB6H5IVHHTE2OVHXE7X4T46LAJQ",
+				"supportedInterfaces": {}
+			},
+			"apiEndpoint": "https://api.fe.amazonalexa.com",
+			"apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLjZiOGM0ZWUxLWIyNmUtNDM0Yi1iOTM2LWU0YTBlZGFhODQyMiIsImV4cCI6MTU2ODc5MTM4OCwiaWF0IjoxNTY4NzkxMDg4LCJuYmYiOjE1Njg3OTEwODgsInByaXZhdGVDbGFpbXMiOnsiY29udGV4dCI6IkFBQUFBQUFBQXdDa1NzWVVoV2N0TDZNYThuUFhvSU5KS3dFQUFBQUFBQUMwNTlhR25sRWFyVktNR3dCV2t6dkNQcHFLZmhYSDB4VFlRZ0F3N1FuS1l1M01BU1FwTWZldDU3VC9xdTh0ZXNNc3F1UUtjWkZiajgwRm01S0tpcGJubmRIbGNpQlpBdHIzVmdWcWNtQko5c3pJbmszRUdDb2dySk5jVWErL2dvbEgzbUFGY3NIaGtiNHpydCtIdmE1MEk5SFptd3AxUkI5VGxjZk5MTy9vRjQxRDhVV3REaXVQaTdqSTZ1c1NHNzdZbmZrc2Ixd05DN01LT3BtVGs4Qzcra1BncnpIbTZSa2FxMHluaHc3REJyOTRwOHF2eG5UWi9oWUlndWoybkNKWmIySE1Db3BmRkxqbGhDLytpZ3FxWXBHbXJTbHcyVzZNcGk5OFV6MlY0YmlGUGtYcW9EeSs2OW52ZXR2Mzh3WnkvWXJRdDAxRUx3cWRZeVlieU54b2MwT0xQTnlFTXNoS0hGa2l0bFlua1ovbU5UdG12emdEanJpWHplWmc1czRJc3BqWExwUDlsdHYya1E9PSIsImNvbnNlbnRUb2tlbiI6bnVsbCwiZGV2aWNlSWQiOiJhbXpuMS5hc2suZGV2aWNlLkFHQVZNRENIR1VEUEhHU1VMNUtHSDZGNVE2NE1YUkFJNlY3TkNBQ0xWTFpORExHM1lETkJUR1lWSVZGQjNWTllKVEJPTFZLQlNYUkRZNUVGVzc2SUsyS0k2VUFISFZPRVpKVVpTQkdERUdDVzNUUlJHTzRPWVVDSVFTVVdMREtYV1NDN1o3UUlLT1BHTVpaSUxDUVFSNVNKSEdSQjZINUlWSEhURTJPVkhYRTdYNFQ0NkxBSlEiLCJ1c2VySWQiOiJhbXpuMS5hc2suYWNjb3VudC5BRTRBMkxISUNNVEg0RFZMNUZaSVFTNEZHRkRDM0JCSDVTNU5GWFVSVUZJR1ZYN1lDU0VaQllCWEtITE1FMzdEU1BJMlBMQ05DTEpSNEZLVk5XSE1YM0VNNkpSVVVCNjJBNjRITk41WERBSFlTQUpEVVo3WElUWFVEUURUNE5LR1o3WEpFNTNYWTdKS0FTSUZTM0dOQ1hQS0c3WFZCTE1LU1YzUFRDUDZDQ0Y2N0c3MktFTVNHTVhVVE4zVkU0UUdZNk9USTZIUVlRWkNOQ1EifX0.o8tEBqRfScXpdaeSOfHnsRJd8paJPCm2sLcB4tkrRUULQ_Tn1scutabVeHiCENVPwjbWqyPsKT0vDU-Hh0_TvRMumxDcAhW7FJm761f8sqgyHjd-OW2gdrsMuNGi2x3T_JedhpTN0osPgDxJpaKl0kzaC1JJnMPZkPWjA7lHYSKG5-z3SFyl3HabnGzm1ZBonChoZODtxlMsHyQdXJsUGSUbjNTD-S-C6VqXJheKCIFwFnRGSRynFondrA28kaSXmJsfHD8DP7jzylm76OjT1K7gma4RDEBm_WSe3zTFF4IYhGv6sya08fWRh_26mXM6OnRNshHXOgXyPjZi9WV8dA"
+		},
+		"Viewport": {
+			"experiences": [
+				{
+					"arcMinuteWidth": 246,
+					"arcMinuteHeight": 144,
+					"canRotate": false,
+					"canResize": false
+				}
+			],
+			"shape": "RECTANGLE",
+			"pixelWidth": 1024,
+			"pixelHeight": 600,
+			"dpi": 160,
+			"currentPixelWidth": 1024,
+			"currentPixelHeight": 600,
+			"touch": [
+				"SINGLE"
+			],
+			"video": {
+				"codecs": [
+					"H_264_42",
+					"H_264_41"
+				]
+			}
+		}
+	},
+	"request": {
+		"type": "IntentRequest",
+		"requestId": "amzn1.echo-api.request.9bf986f6-97ae-4df0-8c6e-6cb0687d333c",
+		"timestamp": "2019-09-18T07:18:08Z",
+		"locale": "ja-JP",
+		"intent": {
+			"name": "ContinueIntent",
+			"confirmationStatus": "NONE",
+			"slots": {
+				"answer": {
+					"name": "answer",
+					"value": "はい",
+					"resolutions": {
+						"resolutionsPerAuthority": [
+							{
+								"authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.6b8c4ee1-b26e-434b-b936-e4a0edaa8422.answer",
+								"status": {
+									"code": "ER_SUCCESS_MATCH"
+								},
+								"values": [
+									{
+										"value": {
+											"name": "はい",
+											"id": "c4836ea5ab623315c893c08dddb9dfd8"
+										}
+									}
+								]
+							}
+						]
+					},
+					"confirmationStatus": "NONE",
+					"source": "USER"
+				}
+			}
+		}
+	}
+}

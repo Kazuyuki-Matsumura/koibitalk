@@ -153,12 +153,12 @@ const FacilitateIntentHandler = {
       ];
     }else{
       speechText = [
-        `え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？`,
-        `え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？`,
-        `え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？`,
-        `え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？`,
-        `え〜，本当にそれでいいの？${attributes.username2}さんはしたい？`,
-        `え〜，本当にそれでいいの？${attributes.username1}さんはしたい？`
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username2}さんはしたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username1}さんはしたい？</prosody>`
       ]
     };
 
@@ -177,10 +177,16 @@ const ContinueIntentHandler = {
   },
   handle(handlerInput) {
 
+    if(handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value.name === "はい"){
+      speechText = `<prosody pitch="x-low">よかったじゃない．会話は盛り上がったかしら？また話題が欲しかったら呼んでちょうだい</prosody>`;
+    }else if(handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value.name === "いいえ"){
+      speechText = `<prosody pitch="x-low">あらそう．残念ね．会話は盛り上がったかしら？また話題が欲しかったら呼んでちょうだい</prosody>`;
+    }
+
     return handlerInput.responseBuilder
       .speak(speechText)
-      .reprompt(speechText)
-      .withSimpleCard('コイビトーク', speechText[x])
+      // .reprompt(speechText)
+      .withSimpleCard('コイビトーク', speechText)
       .getResponse();
   },
 };
