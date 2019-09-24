@@ -120,7 +120,9 @@ const TopicIntentHandler = {
         `<prosody pitch="x-low">${userName1}さん，答えてちょうだい.${userName2}さんの一番好きなところは次のうちどれ？1番,顔,2番,性格,3番,服装,4番，経済力</prosody>`,
         `<prosody pitch="x-low">${userName2}さん，答えてちょうだい.${userName1}さんの一番好きなところは次のうちどれ？1番,顔,2番,性格,3番,服装,4番，経済力</prosody>`,
         `<prosody pitch="x-low">${userName1}さん，答えてちょうだい.${userName2}さんとデートに行くなら次のうちどこ？1番,遊園地,2番,海,3番,ショッピングモール,4番，映画館</prosody>`,
-        `<prosody pitch="x-low">${userName2}さん，答えてちょうだい.${userName1}さんとデートに行くなら次のうちどこ？1番,遊園地,2番,海,3番,ショッピングモール,4番，映画館</prosody>`
+        `<prosody pitch="x-low">${userName2}さん，答えてちょうだい.${userName1}さんとデートに行くなら次のうちどこ？1番,遊園地,2番,海,3番,ショッピングモール,4番，映画館</prosody>`,
+        `<prosody pitch="x-low">${userName1}さん，答えてちょうだい.${userName2}さんと映画を観るなら次のうちどれ？1番,アクション映画,2番,コメディ映画,3番,ミステリー映画,4番，アニメ映画</prosody>`,
+        `<prosody pitch="x-low">${userName2}さん，答えてちょうだい.${userName1}さんと映画を観るなら次のうちどれ？1番,アクション映画,2番,コメディ映画,3番,ミステリー映画,4番，アニメ映画</prosody>`
       ];
     };
 
@@ -187,7 +189,9 @@ const FacilitateIntentHandler = {
         `<prosody pitch="x-low">え〜，本当にそうなの？${attributes.username2}さんは納得した？</prosody>`,
         `<prosody pitch="x-low">え〜，本当にそうなの？${attributes.username1}さんは納得した？</prosody>`,
         `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？</prosody>`
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username2}さんは観たい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username1}さんは観たい？</prosody>`
       ]
     };
 
