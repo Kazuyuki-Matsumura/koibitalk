@@ -1,22 +1,26 @@
 const Alexa = require('ask-sdk-core');
 // const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
-// const { DynamoDbPersistenceAdapter } = require('ask-sdk-dynamodb-persistence-adapter');
-// const dynamoDbPersistenceAdapter = new DynamoDbPersistenceAdapter({
-//   tableName: 'QuestionTable'
-// });
+const { DynamoDbPersistenceAdapter } = require('ask-sdk-dynamodb-persistence-adapter');
+const dynamoDbPersistenceAdapter = new DynamoDbPersistenceAdapter({
+  tableName: 'QuestionTable'
+});
+const aws = require('aws-sdk');
+const dynamoDB = new aws.DynamoDB()
+
+const SKILL_NAME = 'コイビトーク';
 
 //永続アトリビュートの取得
 function getAttributes(attributesManager) {
   return new Promise((resolve, reject) => {
     attributesManager.getPersistentAttributes()
       .then((attributes) => {
-        if (attributes.validApplicants == undefined) {
-          attributes.validApplicants = initialApplicants;
+        if (attributes.id == undefined) {
+          attributes.id = 0;
         }
         resolve(attributes);
       })
       .catch((error) => {
-        resolve({ validApplicants: initialApplicants });
+        resolve({ id: 0 });
       });
   });
 }
@@ -34,6 +38,24 @@ const LaunchRequestHandler = {
       .speak(speechText)
       .reprompt(repromptText)
       .getResponse();
+
+    // return getAttributes(handlerInput.attributesManager)
+    //   .then((attributes) => {
+    //     const speechText = '<prosody pitch="x-low">コイビトークへようこそ．<break time="1s"/>あなたたちの名前を聞かせてもらうわ．<break time="1s"/>ひとりめの名前を教えてちょうだい．</prosody>';
+    //     const repromptText = '<prosody pitch="x-low">ひとりめの名前を教えてちょうだい</prosody>';
+
+    //     attributes.userName1 = "松村";
+    //     attributes.userName2 = "佐藤";
+
+    //     handlerInput.attributesManager.setPersistentAttributes(attributes);
+    //     return handlerInput.attributesManager.savePersistentAttributes()
+    //       .then(() => {
+    //         return handlerInput.responseBuilder
+    //           .speak(speechText)
+    //           .reprompt(repromptText)
+    //           .getResponse();
+    //       });    
+    //   })
   },
 };
 
@@ -46,13 +68,16 @@ const RegisterIntentHandler = {
 
     const slots = handlerInput.requestEnvelope.request.intent.slots;
     let username = slots.name.value;
-    //二人の名前を登録するためにセッションアトリビュートの使用．
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
-    
-    if(attributes.username1===undefined){
-      attributes.username1 = username;
-      handlerInput.attributesManager.setSessionAttributes(attributes)
-      const speechText = `<prosody pitch="x-low">${attributes.username1}さんね．もう一人の方の名前を教えてちょうだい</prosody>`;
+    // //二人の名前を登録するためにセッションアトリビュートの使用．
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+    // let userName1 = '松村';
+    // let userName2 = '佐藤';
+
+    if(sessionAttributes.username1===undefined){
+      sessionAttributes.username1 = username;
+      handlerInput.attributesManager.setSessionAttributes(sessionAttributes)
+      const speechText = `<prosody pitch="x-low">${sessionAttributes.username1}さんね．もう一人の方の名前を教えてちょうだい</prosody>`;
       const repromptText = '<prosody pitch="x-low">もう一人の方の名前を教えてちょうだい</prosody>';
 
       return handlerInput.responseBuilder
@@ -61,17 +86,30 @@ const RegisterIntentHandler = {
         .getResponse();
     }
 
-    if(attributes.username2===undefined){
-      attributes.username2 = username;
-      handlerInput.attributesManager.setSessionAttributes(attributes)
-      const speechText = `<prosody pitch="x-low">${attributes.username1}さんと${attributes.username2}さんね．話題を提供してと言ってみてちょうだい</prosody>`;
-      const repromptText = '<prosody pitch="x-low">話題を提供してと言ってみてちょうだい</prosody>';
+    if(sessionAttributes.username2===undefined){
+      return getAttributes(handlerInput.attributesManager)
+        .then((attributes) => {
 
-      return handlerInput.responseBuilder
-        .speak(speechText)
-        .reprompt(repromptText)
-        .getResponse();
+          sessionAttributes.username2 = username;
+          let speechText = `<prosody pitch="x-low">${sessionAttributes.username1}さんと${sessionAttributes.username2}さんね．話題を提供してと言ってみてちょうだい</prosody>`;
+          const repromptText = '<prosody pitch="x-low">話題を提供してと言ってみてちょうだい</prosody>';
+  
+          //前回も同じユーザなら言葉変える
+          if(attributes.pastquestions.username1 === sessionAttributes.username1 && attributes.pastquestions.username2 === sessionAttributes.username2){
+            speechText = '<prosody pitch="x-low">あらあなたたちまた来たのね．話題を提供してと言ってみてちょうだい</prosody>';
+            sessionAttributes.lastquestionnumber = attributes.pastquestions.lastquestionnumber;
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes)
+          }
+          return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(repromptText)
+            .getResponse();
+        })       
     }
+    // return handlerInput.responseBuilder
+    //   .speak(speechText)
+    //   .reprompt(repromptText)
+    //   .getResponse();
   },
 };
 
@@ -85,12 +123,19 @@ const TopicIntentHandler = {
     let x = 1;
     let size;
 
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
-    // attributes.username1 = '松村';
-    // attributes.username2 = '佐藤';
-    handlerInput.attributesManager.setSessionAttributes(attributes)
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    // sessionAttributes.username1 = '松村';
+    // sessionAttributes.username2 = '佐藤';
+    // handlerInput.attributesManager.setSessionAttributes(sessionAttributes)
 
-    if(attributes.username1 === undefined || attributes.username2 === undefined){
+    let userName1 = sessionAttributes.username1;
+    let userName2 = sessionAttributes.username2;
+    let lastQuestionNumber = sessionAttributes.lastquestionnumber;
+
+    // let userName1 = '松村';
+    // let userName2 = '佐藤';
+
+    if(userName1 === undefined || userName2 === undefined){
       speechText = [
           // 未来の話題
           'お二人で旅行に行くならどの都道府県に行きたいですか？',
@@ -108,8 +153,6 @@ const TopicIntentHandler = {
           'お二人の初デートのことを教えてください'
       ];
     }else{
-      let userName1 = attributes.username1;
-      let userName2 = attributes.username2;
       speechText = [
         `<prosody pitch="x-low">${userName1}さん，答えてちょうだい.二人で旅行に行くならどの都道府県に行きたい？</prosody>`,
         `<prosody pitch="x-low">${userName2}さん，答えてちょうだい.二人で旅行に行くならどの都道府県に行きたい？</prosody>`,
@@ -130,21 +173,41 @@ const TopicIntentHandler = {
     size = speechText.length ;
     x = Math.floor(Math.random() * size);
 
-    attributes.number = x;
-    handlerInput.attributesManager.setSessionAttributes(attributes)
+    if(lastQuestionNumber === x){
+      x = Math.floor(Math.random() * size);
+    }
 
-    //以前に行った質問を記録する
-    // const attr = await handlerInput.attributesManager.getPersistentAttributes();
-    // attr.preQuestion = 'お二人で旅行に行くならどの都道府県に行きたいですか？';
-    // handlerInput.attributesManager.setPersistentAttributes(attr);
-    // await handlerInput.attributesManager.savePersistentAttributes();
-    // console.log(attr.prequestion);
+    sessionAttributes.number = x;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes)
 
-    return handlerInput.responseBuilder
-      .speak(speechText[x])
-      .reprompt(speechText[attributes.number])
-      .withSimpleCard('コイビトーク', speechText[x])
-      .getResponse();
+    //今回の質問を記録する
+    return getAttributes(handlerInput.attributesManager)
+      .then((attributes) => {
+
+        attributes.pastquestions = {
+          id: 0,
+          username1: userName1,
+          username2: userName2,
+          question: speechText[x],
+          lastquestionnumber: x
+        };
+
+        handlerInput.attributesManager.setPersistentAttributes(attributes);
+        return handlerInput.attributesManager.savePersistentAttributes()
+          .then(() => {
+            return handlerInput.responseBuilder
+            .speak(speechText[x])
+            .reprompt(speechText[x])
+            .withSimpleCard('コイビトーク', speechText[x])
+            .getResponse();
+          });    
+      })
+
+    // return handlerInput.responseBuilder
+    //   .speak(speechText[x])
+    //   .reprompt(speechText[x])
+    //   .withSimpleCard('コイビトーク', speechText[x])
+    //   .getResponse();
   },
 };
 
@@ -155,13 +218,21 @@ const FacilitateIntentHandler = {
   },
   handle(handlerInput) {
 
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     // attributes.username1 = '松村';
     // attributes.username2 = '佐藤';
     // attributes.number = 7;
-    handlerInput.attributesManager.setSessionAttributes(attributes)
+    // handlerInput.attributesManager.setSessionAttributes(attributes)
 
-    if(attributes.username1 === undefined || attributes.username2 === undefined){
+    let userName1 = sessionAttributes.username1;
+    let userName2 = sessionAttributes.username2;
+    let number = sessionAttributes.number;
+
+    // let userName1 = '松村';
+    // let userName2 = '佐藤';
+    // let number = 7;
+
+    if(userName1 === undefined || userName2 === undefined){
       speechText = [
           // 未来の話題
           'とてもいいですね，そこで何をしたいですか？',
@@ -180,18 +251,18 @@ const FacilitateIntentHandler = {
       ];
     }else{
       speechText = [
-        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username2}さんはしたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username1}さんはしたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそうなの？${attributes.username2}さんは納得した？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそうなの？${attributes.username1}さんは納得した？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username2}さんは行きたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそこでいいの？${attributes.username1}さんは行きたい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username2}さんは観たい？</prosody>`,
-        `<prosody pitch="x-low">え〜，本当にそれでいいの？${attributes.username1}さんは観たい？</prosody>`
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${userName2}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${userName1}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${userName2}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${userName1}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${userName2}さんはしたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${userName1}さんはしたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそうなの？${userName2}さんは納得した？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそうなの？${userName1}さんは納得した？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${userName2}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそこでいいの？${userName1}さんは行きたい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${userName2}さんは観たい？</prosody>`,
+        `<prosody pitch="x-low">え〜，本当にそれでいいの？${userName1}さんは観たい？</prosody>`
       ]
     };
 
@@ -206,9 +277,9 @@ const FacilitateIntentHandler = {
     //   });
 
     return handlerInput.responseBuilder
-      .speak(speechText[attributes.number])
-      .reprompt(speechText[attributes.number])
-      .withSimpleCard('コイビトーク', speechText[attributes.number])
+      .speak(speechText[number])
+      .reprompt(speechText[number])
+      .withSimpleCard('コイビトーク', speechText[number])
       .getResponse();
   },
 };
@@ -301,8 +372,8 @@ const ErrorHandler = {
 
 // （4）Lambda 関数ハンドラーを定義する
 const skillBuilder = Alexa.SkillBuilders.custom();
-
 exports.handler = skillBuilder
+  .withPersistenceAdapter(dynamoDbPersistenceAdapter)
   .addRequestHandlers(
     LaunchRequestHandler,
     RegisterIntentHandler,
